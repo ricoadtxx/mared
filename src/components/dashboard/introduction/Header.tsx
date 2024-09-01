@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const HeaderIntroduction = () => {
 	return (
-		<div className="relative z-10 h-3/4 gap-20 flex justify-center items-center">
+		<div className="relative z-10 h-3/4 gap-20 flex justify-center items-center my-24">
 			<div className="overflow-hidden z-[9999] flex flex-col justify-center items-center gap-5 py-24 mt-28">
 				<div className="overflow-hidden">
 					<motion.h1
