@@ -8,10 +8,10 @@ const RootLayout = ({
 	children: React.ReactNode;
 }>) => {
 	return (
-		<section className="bg-[#030014] flex">
+		<section className="bg-black flex">
 			<Sidebar />
 			<StarsCanvas />
-			<div className="w-full relative p-2 md:pl-72 flex flex-col">{children}</div>
+			<div className="w-full relative pl-16 md:pl-72 flex flex-col">{children}</div>
 		</section>
 	);
 };
