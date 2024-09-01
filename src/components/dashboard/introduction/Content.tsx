@@ -11,7 +11,7 @@ const ContentIntroduction = () => {
 	});
 
 	return (
-		<div className="relative lg:overflow-hidden flex flex-col w-full h-full py-24 mb-14">
+		<div className="relative lg:overflow-hidden flex flex-col w-full h-full py-28 mb-20">
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-10 px-5 z-10">
 				<div className="md:w-[80%] p-4 flex items-center">
 					<h1 className="text-4xl font-sans font-bold text-lime-400 tracking-widest text-center md:text-left">
