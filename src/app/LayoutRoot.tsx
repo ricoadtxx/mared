@@ -9,7 +9,7 @@ const LayoutRoot = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 	const pathname = usePathname();
 	return (
 		<>
-			{!disableNavbar.includes(pathname) && <Navbar />}
+			{!disableNavbar.includes(pathname) && <Navbar /> }
 			{children}
 		</>
 	);

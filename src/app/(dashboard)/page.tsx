@@ -10,7 +10,7 @@ const Dashboard = () => {
 			<Introduction />
 			<LandUse />
 			<Planning />
-			<Realization />
+			<Realization />	
 			<Conclusion />
 		</div>
 	);
