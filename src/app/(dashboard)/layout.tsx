@@ -10,8 +10,8 @@ const RootLayout = ({
 	return (
 		<section className="bg-[#030014] flex">
 			<Sidebar />
-			<StarsCanvas />
-			{children}
+			{/* <StarsCanvas /> */}
+			<div className="w-full relative p-2 md:pl-72 flex flex-col">{children}</div>
 		</section>
 	);
 };

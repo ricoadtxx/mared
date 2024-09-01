@@ -13,7 +13,7 @@ const Sidebar = () => {
 	const pathname = usePathname();
 
 	return (
-		<div className="relative z-50 ">
+		<div className="z-50 h-screen fixed">
 			<button
 				className="md:hidden fixed top-4 right-4 z-50 p-2 bg-gray-800 text-white rounded-lg"
 				onClick={() => setExpanded((curr) => !curr)}
@@ -21,7 +21,7 @@ const Sidebar = () => {
 				{expanded ? <PiXCircleFill /> : <GiHamburgerMenu />}
 			</button>
 			<div
-				className={`bg-[#150e3d55] fixed top-0 left-0 h-screen overflow-hidden md:w-72 dark:bg-gray-900 px-4 pt-10 transform transition-all duration-300 md:static ${
+				className={`bg-[#150e3d] md:bg-[#150e3d55] fixed top-0 left-0 h-screen overflow-hidden md:w-72 dark:bg-gray-900 px-4 pt-10 transform transition-all duration-300 md:static ${
 					expanded ? "w-64" : "w-[75px]"
 				}`}
 			>
