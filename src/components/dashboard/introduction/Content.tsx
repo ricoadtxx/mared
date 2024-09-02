@@ -147,7 +147,7 @@ const ContentIntroduction = () => {
 					alt="blackhole"
 					width={800}
 					height={800}
-					className="filter opacity-30 brightness-70"
+					className="filter opacity-30 brightness-70 w-full xl:w-3/4"
 				/>
 			</motion.div>
 		</div>
