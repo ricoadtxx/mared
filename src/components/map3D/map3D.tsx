@@ -12,7 +12,7 @@ const Map3D = () => {
 		mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY as string;
 
 		mapRef.current = new mapboxgl.Map({
-			style: "mapbox://styles/mapbox/light-v11",
+			style: "mapbox://styles/mapbox/streets-v12",
 			center: [106.82714821674968, -6.175291011452824],
 			zoom: 15.6,
 			pitch: 75,

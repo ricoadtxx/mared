@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 
-const disableNavbar = ["/introduction", "/landuse", "/planning", "/realization", "/conclusion"];
+const disableNavbar = ["/introduction", "/sekolah"];
 
 const LayoutRoot = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 	const pathname = usePathname();

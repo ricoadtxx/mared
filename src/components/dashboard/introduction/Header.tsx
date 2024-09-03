@@ -1,44 +1,221 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { Bar } from "react-chartjs-2";
+import {
+	Chart as ChartJS,
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	Title,
+	Tooltip,
+	Legend,
+} from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+
+ChartJS.register(
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	Title,
+	Tooltip,
+	Legend,
+	ChartDataLabels
+);
 
 const HeaderIntroduction = () => {
-	return (
-		<div className="relative z-10 h-3/4 gap-20 flex justify-center items-center pt-28 pb-44 md:pt-14">
-			<div className="overflow-hidden z-[9999] flex flex-col justify-center items-center gap-5 py-24 mt-28">
-				{/* Title Animation */}
-				<div className="overflow-hidden">
-					<motion.h1
-						initial={{ y: 100 }}
-						animate={{ y: 0 }}
-						transition={{
-							duration: 1.5,
-							ease: [0.6, 0.01, -0.05, 0.9],
-						}}
-						className="text-white text-5xl md:text-7xl font-anton"
-					>
-						DKI JAKARTA
-					</motion.h1>
-				</div>
+	const { ref, inView } = useInView({
+		triggerOnce: false,
+		threshold: 0.1,
+	});
 
-				{/* Subtitle Animation */}
-				<div className="w-3/4 md:w-1/2 overflow-hidden flex justify-center items-center">
-					<motion.p
-						initial={{ x: 1000 }}
-						animate={{ x: 0 }}
+	const data = {
+		labels: ["2019", "2020", "2021", "2022", "2023"],
+		datasets: [
+			{
+				label: "Persentase Penduduk Miskin",
+				data: [3.47, 4.53, 4.72, 4.69, 4.44],
+				backgroundColor: "rgba(255, 99, 132, 1)",
+				borderColor: "rgba(75, 192, 192, 1)",
+				borderWidth: 1,
+			},
+		],
+	};
+
+	const options: any = {
+		responsive: true,
+		maintainAspectRatio: false,
+		layout: {
+			padding: {
+				top: 20,
+			},
+		},
+		scales: {
+			y: {
+				beginAtZero: true,
+				ticks: {
+					callback: function (value: any) {
+						return value + "%";
+					},
+					color: "white",
+				},
+				title: {
+					color: "white",
+				},
+			},
+		},
+		plugins: {
+			legend: {
+				labels: {
+					color: "white",
+				},
+				position: "bottom",
+			},
+			tooltip: {
+				callbacks: {
+					labelTextColor: () => "white",
+				},
+			},
+			datalabels: {
+				color: "white",
+				display: true,
+				anchor: "end",
+				align: "top",
+				offset: 4,
+				font: {
+					size: 12,
+				},
+			},
+		},
+	};
+
+	return (
+		<div className="relative lg:overflow-hidden flex flex-col w-full h-full py-20 mb-20 z-50">
+			<div className="grid grid-cols-1 xl:grid-cols-2 gap-10 px-5 z-10">
+				{/* Title */}
+				<div className="xl:w-[75%] p-4 overflow-hidden">
+					<motion.h1
+						initial={{ x: -500 }}
+						animate={inView ? { x: 0 } : { x: -500 }}
 						transition={{
 							duration: 1.5,
-							delay: 0.5,
-							ease: "easeOut",
+							type: "spring",
+							stiffness: 50,
+							damping: 10,
 						}}
-						className="text-white text-2xl md:text-lg font-sans text-center"
+						className="text-4xl font-sans font-bold text-lime-400 tracking-widest text-center xl:text-left pb-2"
 					>
-						Provinsi DKI Jakarta terbagi menjadi lima wilayah Kota Administrasi
-						dan satu Kabupaten Administrasi dengan luas keseluruhan wilayah
-						662,33 km²
+						About Disparities in Jakarta
+					</motion.h1>
+					<motion.p
+						initial={{ x: -500 }}
+						animate={inView ? { x: 0 } : { x: -500 }}
+						transition={{
+							duration: 1.5,
+							type: "spring",
+						}}
+						className="text-white text-base font-sans text-justify md:text-xl xl:text-lg"
+					>
+						Jakarta sebagai pusat ekonomi utama masih mengalami ketimpangan yang
+						signifikan dalam berbagai aspek kehidupan masyarakatnya. ketimpangan
+						ini sering terlihat dalam hal akses terhadap layanan dasar seperti
+						pendidikan, kesehatan, dan pekerjaan.
+					</motion.p>
+				</div>
+				<div className="p-4 xl:w-[70%] ml-auto">
+					<motion.p
+						initial={{ x: 500 }}
+						animate={inView ? { x: 0 } : { x: 500 }}
+						transition={{
+							duration: 1.5,
+							type: "spring",
+						}}
+						className="text-white text-base font-sans text-justify md:text-xl xl:text-lg"
+					>
+						Pendidikan memiliki potensi besar untuk mengatasi ketimpangan ini
+						dengan membuka peluang yang setara bagi semua individu untuk
+						mengakses sumber daya dan kesempatan yang diperlukan. Dengan
+						memperbaiki akses dan kualitas pendidikan, dapat meningkatkan
+						kualitas hidup secara keseluruhan dan mendorong pemerataan
+						pembangunan di berbagai daerah.
+					</motion.p>
+				</div>
+				{/* Graphic Bar */}
+				<div className="p-4 flex flex-col overflow-hidden z-[9999]">
+					<motion.h1
+						initial={{ x: -500 }}
+						animate={inView ? { x: 0 } : { x: -500 }}
+						transition={{
+							duration: 1.5,
+							type: "spring",
+							stiffness: 50,
+							damping: 10,
+						}}
+						className="xl:w-3/4 text-xl font-sans font-bold text-white text-center mb-4"
+					>
+						Data Penduduk Miskin (%) <br />{" "}
+						<p className="text-xs font-light">
+							Sumber: Badan Pusat Statistik Jakarta
+						</p>
+					</motion.h1>
+					<motion.div
+						initial={{ x: -500 }}
+						animate={inView ? { x: 0 } : { x: -500 }}
+						transition={{
+							duration: 1.5,
+							type: "spring",
+							stiffness: 50,
+							damping: 10,
+						}}
+						className="xl:w-3/4 h-[250px]"
+					>
+						<Bar data={data} options={options} />
+					</motion.div>
+				</div>
+				{/* Conclusion */}
+				<div className="p-4 xl:w-[70%] ml-auto flex overflow-hidden">
+					<motion.p
+						initial={{ x: 500 }}
+						animate={inView ? { x: 0 } : { x: 500 }}
+						transition={{
+							duration: 1.5,
+							type: "spring",
+						}}
+						className="text-white text-base md:text-xl xl:text-lg font-sans text-justify"
+					>
+						Data persentase penduduk miskin di Jakarta dari 2019 hingga 2023
+						menunjukkan fluktuasi yang signifikan. pada 2019 menyentuh angka
+						3,47% kemudian menjadi 4,53% pada 2020 dan 4,72% pada 2021, angka
+						tersebut sedikit menurun menjadi 4,69% pada 2022 dan 4,44% pada
+						2023. Penurunan ini menunjukkan bahwa upaya untuk mengurangi
+						kemiskinan mulai memberikan hasil, namun masih diperlukan perhatian
+						berkelanjutan untuk mencapai pengurangan yang lebih konsisten.
 					</motion.p>
 				</div>
 			</div>
+
+			<motion.div
+				ref={ref}
+				initial={{ y: 100 }}
+				animate={inView ? { y: -50 } : { y: 100 }}
+				transition={{
+					duration: 1.5,
+					type: "spring",
+					stiffness: 50,
+					damping: 10,
+				}}
+				className="absolute z-0 w-full h-full flex items-center justify-center pt-20"
+			>
+				<Image
+					src="/ide.png"
+					alt="blackhole"
+					width={800}
+					height={800}
+					className="filter opacity-30 brightness-70 w-full xl:w-[65%]"
+				/>
+			</motion.div>
 		</div>
 	);
 };

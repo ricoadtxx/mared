@@ -25,12 +25,15 @@ const HeroSection = () => {
 					)}
 				>
 					Welcome to{" "}
-					<span className="text-lime-100 bg-black px-2 rounded-xl tracking-wider">MARED</span>
+					<span className="text-lime-100 bg-black px-2 rounded-xl tracking-wider">
+						JEDMap
+					</span>
 				</h1>
 				<p className="font-sans text-xl font-extrabold text-black mt-4 px-4 md:w-3/4 xl:w-[40%] text-justify py-5">
-					MARED atau Mapping And Regional Education Disparities. 3D WebGIS yang
-					fokus pada identifikasi dan pengukuran ketimpangan pendidikan untuk
-					perencanaan yang lebih baik.
+					JEDMap atau Jakarta Education Data Map adalah platform WebGIS berbasis
+					3D yang dirancang untuk mempermudah akses dan pemahaman mengenai data
+					pendidikan di Jakarta. Yang diharapkan dapat menjadi kunci untuk
+					mengurangi ketimpangan yang ada di Jakarta melalui pendidikan.
 				</p>
 				<button
 					className={cn(

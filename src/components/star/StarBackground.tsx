@@ -15,11 +15,10 @@ const StarBackground = (props: any) => {
 
 	useFrame((state, delta) => {
 		ref.current.rotation.x -= delta / 10;
-		ref.current.rotation.y -= delta / 15;
+		ref.current.rotation.y -= delta / 10;
 
-		// Update rotation based on mouse movement
-		ref.current.rotation.x += mouse.y * delta * 0.5;
-		ref.current.rotation.y += mouse.x * delta * 0.5;
+		ref.current.rotation.x += mouse.x * delta * 0.5;
+		ref.current.rotation.y += mouse.y * delta * 0.5;
 	});
 
 	return (

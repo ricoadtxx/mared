@@ -1,4 +1,4 @@
-const Conclusion = () => {
+const ConclusionPage = () => {
 	return (
 		<div className="flex h-screen">
 			<h1 className="text-white">
@@ -9,4 +9,4 @@ const Conclusion = () => {
 	);
 };
 
-export default Conclusion;
+export default ConclusionPage;

@@ -42,7 +42,7 @@ const Sidebar = () => {
 								expanded ? "opacity-100" : "opacity-0 md:opacity-100"
 							}`}
 						>
-							MARED
+							JEDMap
 						</span>
 					</Link>
 				</div>

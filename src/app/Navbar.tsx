@@ -29,7 +29,7 @@ const Navbar = () => {
 						alfa.className
 					)}
 				>
-					MARED
+					JEDMap
 				</h1>
 			</div>
 			<div className="flex items-center gap-4">

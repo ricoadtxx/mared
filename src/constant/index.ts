@@ -1,16 +1,8 @@
-import {
-	FaLandmark,
-	FaMap,
-	FaIndustry,
-	FaBook,
-	FaComment,
-} from "react-icons/fa";
+import { FaMap, FaBook, FaComment } from "react-icons/fa";
 
 export const NavLinks = [
 	{ href: "/introduction", key: "Introduction", text: "Introduction" },
-	{ href: "/landuse", key: "Landuse", text: "Landuse" },
-	{ href: "/planning", key: "Planning", text: "Planning" },
-	{ href: "/realization", key: "Realization", text: "Realization" },
+	{ href: "/sekolah", key: "Cek Sekolah", text: "Cek Sekolah" },
 	{ href: "/conclusion", key: "Conclusion", text: "Conclusion" },
 ];
 
@@ -21,20 +13,11 @@ export const sidebarLinks = [
 		label: "Introduction",
 	},
 	{
-		icon: FaLandmark,
-		route: "/landuse",
-		label: "Landuse",
-	},
-	{
 		icon: FaMap,
-		route: "/planning",
-		label: "Planning",
+		route: "/sekolah",
+		label: "Cek Sekolah",
 	},
-	{
-		icon: FaIndustry,
-		route: "/realization",
-		label: "Realization",
-	},
+
 	{
 		icon: FaBook,
 		route: "/conclusion",
