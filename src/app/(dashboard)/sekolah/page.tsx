@@ -5,7 +5,7 @@ import React from "react";
 
 const SekolahPage = () => {
 	return (
-		<div className="flex h-screen z-0">
+		<div className="flex h-screen z-50">
 			<div className="w-screen h-full">
 				<MapSekolah />
 			</div>
