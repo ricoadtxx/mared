@@ -92,7 +92,7 @@ const HeaderIntroduction = () => {
 	};
 
 	return (
-		<div className="relative lg:overflow-hidden flex flex-col w-full h-full py-20 mb-20 z-50">
+		<div className="relative overflow-hidden flex flex-col w-full h-full pt-20 pb-96 sm:pb-60 md:pb-80 xl:pb-44 mb-10 z-50">
 			<div className="grid grid-cols-1 xl:grid-cols-2 gap-10 px-5 z-10">
 				{/* Title */}
 				<div className="xl:w-[75%] p-4 overflow-hidden">
@@ -124,29 +124,10 @@ const HeaderIntroduction = () => {
 						pendidikan, kesehatan, dan pekerjaan.
 					</motion.p>
 				</div>
-				<div className="p-4 xl:w-[70%] ml-auto">
-					<motion.p
+				<div className="p-4 flex flex-col overflow-hidden z-[9999] w-full xl:w-[70%] ml-auto">
+					<motion.h1
 						initial={{ x: 500 }}
 						animate={inView ? { x: 0 } : { x: 500 }}
-						transition={{
-							duration: 1.5,
-							type: "spring",
-						}}
-						className="text-white text-base font-sans text-justify md:text-xl xl:text-lg"
-					>
-						Pendidikan memiliki potensi besar untuk mengatasi ketimpangan ini
-						dengan membuka peluang yang setara bagi semua individu untuk
-						mengakses sumber daya dan kesempatan yang diperlukan. Dengan
-						memperbaiki akses dan kualitas pendidikan, dapat meningkatkan
-						kualitas hidup secara keseluruhan dan mendorong pemerataan
-						pembangunan di berbagai daerah.
-					</motion.p>
-				</div>
-				{/* Graphic Bar */}
-				<div className="p-4 flex flex-col overflow-hidden z-[9999]">
-					<motion.h1
-						initial={{ x: -500 }}
-						animate={inView ? { x: 0 } : { x: -500 }}
 						transition={{
 							duration: 1.5,
 							type: "spring",
@@ -161,21 +142,39 @@ const HeaderIntroduction = () => {
 						</p>
 					</motion.h1>
 					<motion.div
-						initial={{ x: -500 }}
-						animate={inView ? { x: 0 } : { x: -500 }}
+						initial={{ x: 500 }}
+						animate={inView ? { x: 0 } : { x: 500 }}
 						transition={{
 							duration: 1.5,
 							type: "spring",
 							stiffness: 50,
 							damping: 10,
 						}}
-						className="xl:w-3/4 h-[250px]"
+						className="h-[250px]"
 					>
 						<Bar data={data} options={options} />
 					</motion.div>
 				</div>
+				<div className="xl:w-[75%] h-full p-4 overflow-hidden">
+					<motion.p
+						initial={{ x: -500 }}
+						animate={inView ? { x: 0 } : { x: -500 }}
+						transition={{
+							duration: 1.5,
+							type: "spring",
+						}}
+						className="text-white text-base font-sans text-justify md:text-xl xl:text-lg"
+					>
+						Pendidikan memiliki potensi besar untuk mengatasi ketimpangan ini
+						dengan membuka peluang yang setara bagi semua individu untuk
+						mengakses sumber daya dan kesempatan yang diperlukan. Dengan
+						memperbaiki akses dan kualitas pendidikan, dapat meningkatkan
+						kualitas hidup secara keseluruhan dan mendorong pemerataan
+						pembangunan di berbagai daerah.
+					</motion.p>
+				</div>
 				{/* Conclusion */}
-				<div className="p-4 xl:w-[70%] ml-auto flex overflow-hidden">
+				<div className="p-4 xl:w-[70%] ml-auto flex ">
 					<motion.p
 						initial={{ x: 500 }}
 						animate={inView ? { x: 0 } : { x: 500 }}
@@ -190,8 +189,7 @@ const HeaderIntroduction = () => {
 						3,47% kemudian menjadi 4,53% pada 2020 dan 4,72% pada 2021, angka
 						tersebut sedikit menurun menjadi 4,69% pada 2022 dan 4,44% pada
 						2023. Penurunan ini menunjukkan bahwa upaya untuk mengurangi
-						kemiskinan mulai memberikan hasil, namun masih diperlukan perhatian
-						berkelanjutan untuk mencapai pengurangan yang lebih konsisten.
+						kemiskinan mulai memberikan hasil.
 					</motion.p>
 				</div>
 			</div>
@@ -199,7 +197,7 @@ const HeaderIntroduction = () => {
 			<motion.div
 				ref={ref}
 				initial={{ y: 100 }}
-				animate={inView ? { y: -50 } : { y: 100 }}
+				animate={inView ? { y: -100 } : { y: 100 }}
 				transition={{
 					duration: 1.5,
 					type: "spring",
