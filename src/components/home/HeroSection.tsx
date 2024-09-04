@@ -17,7 +17,7 @@ const HeroSection = () => {
 			<div className="absolute inset-0 -z-10">
 				<Map3D />
 			</div>
-			<div className="relative flex flex-col items-center text-center px-5 py-10">
+			{/* <div className="relative flex flex-col items-center text-center px-5 py-10">
 				<h1
 					className={cn(
 						"text-3xl md:text-5xl tracking-wide font-bold text-black",
@@ -57,7 +57,7 @@ const HeroSection = () => {
 						></path>
 					</svg>
 				</button>
-			</div>
+			</div> */}
 		</section>
 	);
 };
