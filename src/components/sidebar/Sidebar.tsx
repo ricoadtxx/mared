@@ -55,7 +55,7 @@ const Sidebar = () => {
 							<Link
 								key={item.label}
 								href={item.route}
-								className={`flex relative items-center px-1 gap-5 mb-4 py-2 rounded-lg transition-all duration-300 ${
+								className={`flex relative text-base items-center overflow-hidden px-1 gap-5 mb-4 py-2 rounded-lg transition-all duration-300 ${
 									isActive
 										? "bg-lime-700 text-white" // Active link styles
 										: "hover:bg-gray-600 dark:hover:bg-gray-700"
@@ -63,7 +63,7 @@ const Sidebar = () => {
 							>
 								<Icon size={27} className="text-white mx-1 absolute" />
 								<span
-									className={`font-medium font-sans text-xl mx-11 text-white transition duration-300 ${
+									className={`font-medium font-sans text-lg mx-11 text-white transition duration-300 ${
 										expanded ? "opacity-100" : "opacity-0 md:opacity-100"
 									}`}
 								>

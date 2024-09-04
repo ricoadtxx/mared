@@ -1,8 +1,9 @@
-import { FaMap, FaBook, FaComment } from "react-icons/fa";
+import { FaMap, FaBook, FaComment, FaSchool } from "react-icons/fa";
 
 export const NavLinks = [
 	{ href: "/introduction", key: "Introduction", text: "Introduction" },
-	{ href: "/sekolah", key: "Cek Sekolah", text: "Cek Sekolah" },
+	{ href: "/zonasi", key: "Zonasi", text: "Zonasi" },
+	{ href: "/sekolah", key: "Sekolah", text: "Sekolah" },
 	{ href: "/conclusion", key: "Conclusion", text: "Conclusion" },
 ];
 
@@ -14,8 +15,13 @@ export const sidebarLinks = [
 	},
 	{
 		icon: FaMap,
+		route: "/zonasi",
+		label: "Zonasi",
+	},
+	{
+		icon: FaSchool,
 		route: "/sekolah",
-		label: "Cek Sekolah",
+		label: "Sekolah",
 	},
 
 	{

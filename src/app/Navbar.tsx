@@ -32,7 +32,7 @@ const Navbar = () => {
 					JEDMap
 				</h1>
 			</div>
-			<div className="flex items-center gap-4">
+			<div className="flex items-center gap-4 z-[9999]">
 				<ul className="hidden xl:flex text-lg font-extrabold tracking-wide gap-7 text-lime-500">
 					{NavLinks.map((link) => (
 						<Link href={link.href} key={link.text} className="cursor-pointer">
