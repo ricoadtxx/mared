@@ -12,8 +12,8 @@ const fontSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-	title: "WEB GIS",
-	description: "Joki Tugas Andalan Klean",
+	title: "JEDMap",
+	description: "WEB GIS Sekolah",
 };
 
 export default function RootLayout({
