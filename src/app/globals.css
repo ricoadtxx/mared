@@ -118,8 +118,58 @@
 		animation: fadeOut 0.3s ease-out;
 	}
 
+	.popup .mapboxgl-popup-content {
+		@apply bg-white bg-opacity-90 shadow-lg p-6 rounded-lg relative w-full;
+		animation: zoomIn 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+		transform: perspective(800px) rotateX(15deg);
+	}
+
+	.popup .mapboxgl-popup-content:hover {
+		transform: perspective(800px) rotateX(0deg);
+	}
+
+	.popup .popup-content {
+		@apply text-sm text-gray-800;
+	}
+
+	.popup .mapboxgl-popup-tip {
+		@apply rounded-sm;
+		background: rgba(255, 255, 255, 0.9);
+	}
+
+	.popup .close-btn {
+		@apply absolute top-2 right-2 w-8 h-8 flex items-center justify-center text-white bg-red-500 rounded-full cursor-pointer hover:bg-red-600;
+		font-size: 1.5rem;
+		line-height: 1;
+	}
+
+	.popup .mapboxgl-popup-close-button {
+		@apply hidden;
+	}
+
+	.popup .custom-close-btn {
+		@apply absolute w-[25px] h-[25px] bg-white border flex items-center justify-center cursor-pointer text-xl text-black rounded-[50%] border-solid border-[#ccc] right-2 top-1 hover:bg-[#f00] hover:text-white hover:border-[#f00];
+	}
+
+	.popup .mapboxgl-popup-content {
+		@apply relative;
+	}
+
+	.popup .mapboxgl-popup-content .popup-content {
+		@apply text-sm text-gray-800;
+	}
+
 	.mapboxgl-marker {
 		@apply z-20;
+	}
+
+	.popup-close-button {
+		@apply w-8 h-8 text-xl bg-transparent transition-[background-color] duration-300 ease-in p-2 rounded-full hover:bg-red-500; /* Lebar tombol */ /* Tinggi tombol */ /* Ukuran font */ /* Padding untuk jarak */ /* Warna dasar */ /* Membuat tombol bulat */
+	} /* Transisi untuk hover */
+
+	/* Style saat hover */
+	.popup-close-button:hover {
+		/* Background merah saat hover */
 	}
 
 	@keyframes zoomIn {

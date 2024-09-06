@@ -1,10 +1,14 @@
+"use client";
+
+import MapZonasi from "@/components/dashboard/zonasi/MapZonasi";
+import React from "react";
+
 const ZonasiPage = () => {
 	return (
-		<div className="flex h-screen">
-			<h1 className="text-white">
-				Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolor,
-				impedit!
-			</h1>
+		<div className="flex h-screen z-50">
+			<div className="w-screen h-full">
+				<MapZonasi />
+			</div>
 		</div>
 	);
 };
