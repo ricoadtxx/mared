@@ -49,6 +49,14 @@ const MapZonasi = () => {
 		});
 		mapRef.current.addControl(geolocate, "top-left");
 
+		geolocate.on("geolocate", (position: any) => {
+			const { latitude, longitude } = position.coords;
+			setLng(longitude);
+			setLat(latitude);
+
+			console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+		});
+
 		const fetchData = async () => {
 			try {
 				const response = await fetch("/api/batas");
