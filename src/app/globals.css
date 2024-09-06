@@ -172,6 +172,7 @@
 		/* Background merah saat hover */
 	}
 
+	
 	@keyframes zoomIn {
 		0% {
 			transform: scale(0.5);

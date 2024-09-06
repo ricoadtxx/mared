@@ -17,7 +17,7 @@ const getRandomColor = () => {
 const MapZonasi = () => {
 	const mapContainerRef = useRef<HTMLDivElement>(null);
 	const mapRef = useRef<mapboxgl.Map | null>(null);
-	const popupRef = useRef<mapboxgl.Popup | null>(null); // Tambahkan ini
+	const popupRef = useRef<mapboxgl.Popup | null>(null);
 	const [lng, setLng] = useState(106.82714821674968);
 	const [lat, setLat] = useState(-6.175291011452824);
 	const [zoom, setZoom] = useState(9);
@@ -28,6 +28,10 @@ const MapZonasi = () => {
 	const [visibilityMap, setVisibilityMap] = useState<{
 		[key: string]: boolean;
 	}>({});
+	const [userLocation, setUserLocation] = useState<mapboxgl.LngLat | null>(
+		null
+	);
+	const markerRef = useRef<mapboxgl.Marker | null>(null);
 
 	useEffect(() => {
 		mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY as string;
@@ -49,12 +53,34 @@ const MapZonasi = () => {
 		});
 		mapRef.current.addControl(geolocate, "top-left");
 
-		geolocate.on("geolocate", (position: any) => {
+		geolocate.on("geolocate", async (position: any) => {
 			const { latitude, longitude } = position.coords;
-			setLng(longitude);
-			setLat(latitude);
 
-			console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+			const userLngLat = new mapboxgl.LngLat(longitude, latitude);
+			setUserLocation(userLngLat);
+
+			try {
+				const response = await fetch("/api/visitor", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						latitude: latitude,
+						longitude: longitude,
+					}),
+				});
+
+				if (!response.ok) {
+					throw new Error("Failed to send geolocation data to server");
+				}
+
+				console.log("Geolocation data sent successfully");
+
+				geolocate.trigger();
+			} catch (error) {
+				console.error("Error sending geolocation data:", error);
+			}
 		});
 
 		const fetchData = async () => {
@@ -190,6 +216,48 @@ const MapZonasi = () => {
 		});
 	}, [lng, lat, zoom, showPolygons]);
 
+	// Geolocate user
+	useEffect(() => {
+		if (mapRef.current && userLocation) {
+			const popupContainer = document.createElement("div");
+			const root = ReactDOM.createRoot(popupContainer);
+
+			const popupContent = (
+				<h3 className="text-sm text-center font-bold">Your Location</h3>
+			);
+
+			root.render(popupContent);
+
+			if (markerRef.current) {
+				markerRef.current.remove();
+				markerRef.current = null;
+			}
+			if (popupRef.current) {
+				popupRef.current.remove();
+				popupRef.current = null;
+			}
+
+			const marker = new mapboxgl.Marker()
+				.setLngLat(userLocation)
+				.addTo(mapRef.current);
+
+			const popup = new mapboxgl.Popup({
+				closeButton: false,
+				closeOnClick: false,
+				className: "popup",
+				offset: 25,
+			})
+				.setDOMContent(popupContainer)
+				.setLngLat(userLocation);
+
+			marker.setPopup(popup);
+
+			markerRef.current = marker;
+			popupRef.current = popup;
+		}
+	}, [userLocation]);
+
+	// Mengaktifkan dan Menonaktifkan Layer
 	useEffect(() => {
 		if (mapRef.current) {
 			const visibleFeatures = polygonData
