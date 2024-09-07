@@ -4,6 +4,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { TfiLayoutGrid2Alt } from "react-icons/tfi";
 import { FaExpandArrowsAlt } from "react-icons/fa";
 import ReactDOM from "react-dom/client";
+import * as turf from "@turf/turf";
 
 const getRandomColor = () => {
 	const letters = "0123456789ABCDEF";
@@ -32,6 +33,7 @@ const MapZonasi = () => {
 		null
 	);
 	const markerRef = useRef<mapboxgl.Marker | null>(null);
+	const [geolocateUsed, setGeolocateUsed] = useState(false);
 
 	useEffect(() => {
 		mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY as string;
@@ -71,13 +73,23 @@ const MapZonasi = () => {
 					}),
 				});
 
+				geolocate.trigger();
+
 				if (!response.ok) {
 					throw new Error("Failed to send geolocation data to server");
 				}
 
 				console.log("Geolocation data sent successfully");
 
-				geolocate.trigger();
+				setGeolocateUsed(true);
+
+				if (mapRef.current) {
+					mapRef.current.flyTo({
+						center: userLngLat,
+						zoom: 14,
+						essential: true,
+					});
+				}
 			} catch (error) {
 				console.error("Error sending geolocation data:", error);
 			}
@@ -91,11 +103,47 @@ const MapZonasi = () => {
 
 				const newColorMap: { [key: string]: string } = {};
 				const newVisibilityMap: { [key: string]: boolean } = {};
+
 				data.forEach((item: any) => {
 					const color = getRandomColor();
 					newColorMap[item.nama_kota] = color;
 					newVisibilityMap[item.nama_kota] = true;
+
+					// Validasi dan perbaiki MultiPolygon jika diperlukan
+					item.koordinat.coordinates = item.koordinat.coordinates.map(
+						(polygon: any) => {
+							return polygon.map((ring: any) => {
+								// Pastikan setiap ring memiliki setidaknya 4 titik
+								if (ring.length < 4) {
+									console.warn(
+										"Ring tidak valid dengan kurang dari 4 posisi:",
+										ring
+									);
+								}
+
+								// Tutup ring jika belum ditutup
+								if (
+									ring.length >= 3 &&
+									(ring[0][0] !== ring[ring.length - 1][0] ||
+										ring[0][1] !== ring[ring.length - 1][1])
+								) {
+									ring.push(ring[0]);
+								}
+
+								// Pastikan sekarang memiliki 4 atau lebih posisi
+								if (ring.length < 4) {
+									console.error(
+										"Ring masih tidak valid setelah mencoba memperbaiki:",
+										ring
+									);
+								}
+
+								return ring;
+							});
+						}
+					);
 				});
+
 				setColorMap(newColorMap);
 				setVisibilityMap(newVisibilityMap);
 
@@ -111,7 +159,10 @@ const MapZonasi = () => {
 							type: "FeatureCollection",
 							features: data.map((item: any) => ({
 								type: "Feature",
-								geometry: item.koordinat,
+								geometry: {
+									type: "MultiPolygon",
+									coordinates: item.koordinat.coordinates,
+								},
 								properties: {
 									title: item.nama_kota,
 									description: item.provinsi,
@@ -219,11 +270,28 @@ const MapZonasi = () => {
 	// Geolocate user
 	useEffect(() => {
 		if (mapRef.current && userLocation) {
+			const userPoint = turf.point([userLocation.lng, userLocation.lat]);
+
+			let containsKota = null;
+
+			polygonData.forEach((item: any) => {
+				const polygon = turf.multiPolygon(item.koordinat.coordinates);
+				if (turf.booleanPointInPolygon(userPoint, polygon)) {
+					containsKota = item.nama_kota;
+				}
+			});
+
 			const popupContainer = document.createElement("div");
 			const root = ReactDOM.createRoot(popupContainer);
 
-			const popupContent = (
-				<h3 className="text-sm text-center font-bold">Your Location</h3>
+			const popupContent = containsKota ? (
+				<h3 className="text-sm text-center font-bold">
+					Anda Berada di {containsKota}
+				</h3>
+			) : (
+				<h3 className="text-sm text-center font-bold">
+					Anda tidak berada di area yang terdaftar
+				</h3>
 			);
 
 			root.render(popupContent);
@@ -255,7 +323,7 @@ const MapZonasi = () => {
 			markerRef.current = marker;
 			popupRef.current = popup;
 		}
-	}, [userLocation]);
+	}, [polygonData, userLocation]);
 
 	// Mengaktifkan dan Menonaktifkan Layer
 	useEffect(() => {
