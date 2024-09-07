@@ -17,36 +17,64 @@ const FooterIntroduction = () => {
 	const closeModal = () => setIsModalOpen(false);
 
 	return (
-		<div className="relative overflow-hidden flex flex-col w-full h-3/4 2xl:h-full py-10 mt-20 mb-20 z-50">
+		<div className="relative overflow-hidden flex flex-col w-full h-[99.9vh] z-50">
 			{/* Title */}
-			<div>
-				<h1 className="text-lime-400 text-center text-7xl font-bold font-anton tracking-wider">
+			<div className=" mt-14 mb-20">
+				<motion.h1
+					initial={{ y: -100 }}
+					animate={{ y: 0 }}
+					transition={{
+						duration: 1.5,
+						type: "spring",
+						stiffness: 50,
+						damping: 10,
+					}}
+					className="text-lime-400 text-center text-7xl font-bold font-anton tracking-wider"
+				>
 					Apa Itu JEDMap
-				</h1>
+				</motion.h1>
 			</div>
 			{/* Content */}
 			<div className="overflow-hidden grid grid-cols-1 lg:grid-cols-2 gap-10 px-5 z-10">
 				{/* Content Title */}
-				<div className="p-4 w-3/4 overflow-hidden">
-					<motion.h1 className="text-4xl font-sans font-bold text-lime-400 tracking-widest text-center lg:text-left pb-2">
+				<motion.div
+					initial={{ x: -100 }}
+					animate={{ x: 0 }}
+					transition={{
+						duration: 1.5,
+						type: "spring",
+						stiffness: 50,
+						damping: 10,
+					}}
+					className="p-4 w-3/4 overflow-hidden"
+				>
+					<h1 className="text-4xl font-sans font-bold text-lime-400 tracking-widest text-center lg:text-left pb-2">
 						Jakarta Education Data Map
-					</motion.h1>
+					</h1>
 					<motion.p className="text-white text-base font-sans text-justify md:text-xl lg:text-lg">
 						Jakarta Education Data Map adalah sebuah platform 3D Webgis yang
 						berfungsi untuk mengakses dan memahami data pendidikan di Jakarta.
 						Disini memiliki fitur untuk mengatahui tentang lokasi anda serta
 						data lokasi sekolah yang ingin anda lihat.
 					</motion.p>
-				</div>
+				</motion.div>
 				{/* Sub Content with Click to Open Modal */}
-				<div
+				<motion.div
+					initial={{ x: 100 }}
+					animate={{ x: 0 }}
+					transition={{
+						duration: 1.5,
+						type: "spring",
+						stiffness: 50,
+						damping: 10,
+					}}
 					className="p-4 w-3/4 ml-auto cursor-pointer"
 					onClick={openModal}
 				>
 					<p className="text-white text-lg font-sans text-center">
 						Click here for more information
 					</p>
-				</div>
+				</motion.div>
 			</div>
 
 			{/* Modal Component */}
@@ -58,15 +86,15 @@ const FooterIntroduction = () => {
 			/>
 
 			<motion.div
-				ref={ref}
-				initial={{ y: 100 }}
+				initial={{ y: 500 }}
+				animate={{ y: 80 }}
 				transition={{
 					duration: 1.5,
 					type: "spring",
 					stiffness: 50,
 					damping: 10,
 				}}
-				className="absolute z-0 w-full h-2/3 flex items-center justify-center"
+				className="absolute z-0 w-full flex items-center justify-center "
 			>
 				<Image
 					src="/think.png"

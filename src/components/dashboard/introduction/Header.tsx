@@ -92,7 +92,7 @@ const HeaderIntroduction = () => {
 	};
 
 	return (
-		<div className="relative overflow-hidden flex flex-col w-full h-full pt-20 pb-96 sm:pb-60 md:pb-80 xl:pb-44 mb-10 z-50">
+		<div className="relative overflow-hidden flex flex-col w-full h-3/4 xl:h-screen py-10 mt-20 mb-20 xl:mb-0 xl:mt-0 z-50">
 			<div className="grid grid-cols-1 xl:grid-cols-2 gap-10 px-5 z-10">
 				{/* Title */}
 				<div className="xl:w-[75%] p-4 overflow-hidden">
