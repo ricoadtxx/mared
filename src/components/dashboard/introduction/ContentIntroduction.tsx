@@ -58,7 +58,7 @@ const ContentIntroduction = () => {
 							memiliki fitur-fitur yang beragam untuk mengakses sekolah-sekolah
 							berdasarkan zonasi. Di platform ini anda dapat menemukan sekolah
 							sesuai dengan lokasi anda dan mengetahui sekolah berdasarkan
-							zonanya.
+							zona nya.
 						</motion.p>
 					</motion.div>
 					{/* Sub Content with Click to Open Modal */}
