@@ -4,7 +4,7 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const Map3D = () => {
-	const mapContainerRef: any = useRef();
+	const mapContainerRef = useRef<HTMLDivElement>(null);
 	const mapRef: any = useRef();
 	const rotateAnimationRef: any = useRef();
 

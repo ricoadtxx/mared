@@ -13,7 +13,7 @@ const Sidebar = () => {
 	const pathname = usePathname();
 
 	return (
-		<div className="z-[9999] h-screen fixed">
+		<div className="z-[999] h-screen fixed">
 			<button
 				className="md:hidden fixed top-4 right-4 z-[9999] p-2 bg-gray-800 text-white rounded-lg"
 				onClick={() => setExpanded((curr) => !curr)}

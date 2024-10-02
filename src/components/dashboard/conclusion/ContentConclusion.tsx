@@ -25,7 +25,7 @@ ChartJS.register(
 	ChartDataLabels
 );
 
-const HeaderIntroduction = () => {
+const ContentConclusion = () => {
 	const { ref, inView } = useInView({
 		triggerOnce: false,
 		threshold: 0.1,
@@ -218,4 +218,4 @@ const HeaderIntroduction = () => {
 	);
 };
 
-export default HeaderIntroduction;
+export default ContentConclusion;

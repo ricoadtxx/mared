@@ -1,5 +1,5 @@
 // app/api/visitor/route.ts
-import supabase from "@/lib/supabase";
+import supabase from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

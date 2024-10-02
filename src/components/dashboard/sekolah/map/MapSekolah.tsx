@@ -4,6 +4,7 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import React from "react";
 
 const MapSekolah = () => {
 	const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -75,7 +76,7 @@ const MapSekolah = () => {
 			if (mapRef.current) {
 				const geocoder = new MapboxGeocoder({
 					accessToken: mapboxgl.accessToken,
-					placeholder: "Search for places",
+					placeholder: "Cari Sekolah",
 					mapboxgl: mapboxgl,
 				});
 				mapRef.current.addControl(geocoder);
@@ -133,8 +134,8 @@ const MapSekolah = () => {
 									&times;
 								</button>
 								<h3 className="text-lg font-bold">School Information</h3>
-								<p className="text-sm">Name: {event.result.text}</p>
-								<p className="text-sm">Address: {event.result.place_name}</p>
+								<p className="text-sm">Nama: {event.result.text}</p>
+								<p className="text-sm">Alamat: {event.result.place_name}</p>
 							</>
 						);
 

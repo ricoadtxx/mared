@@ -1,9 +1,9 @@
-import HeaderIntroduction from "@/components/dashboard/introduction/Header";
+import ContentConclusion from "@/components/dashboard/conclusion/ContentConclusion";
 
 const ConclusionPage = () => {
 	return (
 		<div className="flex flex-col w-full h-full">
-			<HeaderIntroduction />
+			<ContentConclusion />
 		</div>
 	);
 };
