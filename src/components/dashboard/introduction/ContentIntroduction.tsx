@@ -8,7 +8,7 @@ import ModalTutorial from "@/components/dashboard/introduction/modal/ModalTutori
 
 const ContentIntroduction = () => {
 	const { ref, inView } = useInView({
-		triggerOnce: false,
+		triggerOnce: true,
 		threshold: 0.1,
 	});
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,11 +17,14 @@ const ContentIntroduction = () => {
 	const openModal = () => setIsModalOpen(true);
 	const closeModal = () => setIsModalOpen(false);
 
+	if (!inView && isHovered) {
+		setIsHovered(false);
+	}
+
 	return (
 		<>
-			<div className="relative overflow-hidden flex flex-col w-full h-[99.9vh] z-50">
-				{/* Title */}
-				<div className=" mt-14 mb-20">
+			<div className="relative overflow-hidden flex flex-col w-full h-screen z-50">
+				<div className="mt-14 mb-20">
 					<motion.h1
 						initial={{ y: -100 }}
 						animate={{ y: 0 }}
@@ -36,9 +39,7 @@ const ContentIntroduction = () => {
 						Apa Itu JEDMap
 					</motion.h1>
 				</div>
-				{/* Content */}
 				<div className="overflow-hidden grid grid-cols-1 lg:grid-cols-2 gap-10 px-5 z-10">
-					{/* Content Title */}
 					<motion.div
 						initial={{ x: -100 }}
 						animate={{ x: 0 }}
@@ -57,11 +58,10 @@ const ContentIntroduction = () => {
 							Jakarta Education Data Map adalah sebuah platform 3D Webgis yang
 							memiliki fitur-fitur yang beragam untuk mengakses sekolah-sekolah
 							berdasarkan zonasi. Di platform ini anda dapat menemukan sekolah
-							sesuai dengan lokasi anda dan mengetahui sekolah berdasarkan
-							zona nya.
+							sesuai dengan lokasi anda dan mengetahui sekolah berdasarkan zona
+							nya.
 						</motion.p>
 					</motion.div>
-					{/* Sub Content with Click to Open Modal */}
 					<motion.div
 						initial={{ x: 100 }}
 						animate={{ x: 0 }}
@@ -76,7 +76,7 @@ const ContentIntroduction = () => {
 					>
 						<motion.p
 							whileHover={{
-								scale: 1.1,
+								scale: 1.05,
 								transition: { duration: 0.3 },
 							}}
 							whileTap={{
@@ -110,19 +110,21 @@ const ContentIntroduction = () => {
 						stiffness: 50,
 						damping: 10,
 					}}
-					className="absolute z-0 w-full flex items-center justify-center "
+					className="absolute z-0 w-full flex items-center justify-center"
 				>
 					<Image
 						src="/think.png"
-						alt="blackhole"
+						alt="Icon Introduction"
 						width={600}
 						height={600}
 						className="w-full lg:w-[70%] xl:w-1/2 2xl:w-[45%] opacity-60 lg:opacity-100 pt-32 sm:pt-10 md:pt-16"
 					/>
 				</motion.div>
 			</div>
-			{/* Modal Component */}
-			<ModalTutorial isOpen={isModalOpen} onClose={closeModal} />
+
+			{isModalOpen && (
+				<ModalTutorial isOpen={isModalOpen} onClose={closeModal} />
+			)}
 		</>
 	);
 };

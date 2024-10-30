@@ -41,6 +41,7 @@
     "@react-three/drei": "^9.111.5",
     "@react-three/fiber": "^8.17.6",
     "@types/dotenv": "^6.1.1",
+    "@types/lodash.debounce": "^4.0.9",
     "@types/mapbox__mapbox-gl-geocoder": "^5.0.0",
     "@types/node": "^20",
     "@types/pg": "^8.11.8",

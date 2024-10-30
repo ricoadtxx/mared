@@ -7,6 +7,7 @@ import ReactDOM from "react-dom/client";
 import * as turf from "@turf/turf";
 import Link from "next/link";
 import InformationSchool from "./modal/InformationSchool";
+import { Button } from "@/components/ui/button";
 
 const getRandomColor = () => {
 	const letters = "0123456789ABCDEF";
@@ -34,9 +35,9 @@ const MapZonasi = () => {
 	const [userLocation, setUserLocation] = useState<mapboxgl.LngLat | null>(
 		null
 	);
+	const [locationInput, setLocationInput] = useState("");
 	const markerRef = useRef<mapboxgl.Marker | null>(null);
 	const [geolocateUsed, setGeolocateUsed] = useState(false);
-
 	const [cityName, setKecName] = useState<string>("");
 	const [schoolList, setSchoolList] = useState<string[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,10 +47,8 @@ const MapZonasi = () => {
 	const closeModal = () => setIsModalOpen(false);
 
 	useEffect(() => {
-		// Set access token Mapbox
 		mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY as string;
 
-		// Inisialisasi Mapbox jika belum ada
 		if (!mapRef.current) {
 			mapRef.current = new mapboxgl.Map({
 				container: mapContainerRef.current!,
@@ -59,14 +58,11 @@ const MapZonasi = () => {
 			});
 
 			const geolocate = new mapboxgl.GeolocateControl({
-				positionOptions: {
-					enableHighAccuracy: true,
-				},
+				positionOptions: { enableHighAccuracy: true },
 				trackUserLocation: true,
 			});
 			mapRef.current.addControl(geolocate, "top-left");
 
-			// Event handler untuk geolokasi
 			geolocate.on("geolocate", async (position: any) => {
 				const { latitude, longitude } = position.coords;
 				const userLngLat = new mapboxgl.LngLat(longitude, latitude);
@@ -75,19 +71,13 @@ const MapZonasi = () => {
 				try {
 					const response = await fetch("/api/visitor", {
 						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
+						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({ latitude, longitude }),
 					});
 
-					if (!response.ok)
-						throw new Error("Failed to send geolocation data to server");
+					if (!response.ok) throw new Error("Failed to send geolocation data");
 
-					console.log("Geolocation data sent successfully");
 					setGeolocateUsed(true);
-
-					// Pusatkan peta pada lokasi pengguna
 					if (mapRef.current) {
 						mapRef.current.flyTo({
 							center: userLngLat,
@@ -110,8 +100,6 @@ const MapZonasi = () => {
 				if (!response.ok) throw new Error("Error fetching data");
 
 				const data = await response.json();
-				setPolygonData(data);
-
 				const newColorMap: { [key: string]: string } = {};
 				const newVisibilityMap: { [key: string]: boolean } = {};
 
@@ -119,92 +107,16 @@ const MapZonasi = () => {
 					const color = getRandomColor();
 					newColorMap[item.nama_kec] = color;
 					newVisibilityMap[item.nama_kec] = true;
-
-					item.koordinat_geom.coordinates = item.koordinat_geom.coordinates.map(
-						(polygon: any) =>
-							polygon.map((ring: any) => {
-								if (ring.length >= 3 && ring[0] !== ring[ring.length - 1]) {
-									ring.push(ring[0]);
-								}
-								return ring;
-							})
-					);
 				});
 
 				setColorMap(newColorMap);
 				setVisibilityMap(newVisibilityMap);
-
-				if (mapRef.current) {
-					// Simpan state popup dan marker sebelum memperbarui sumber layer
-					const savedPopup = popupRef.current
-						? popupRef.current.getLngLat()
-						: null;
-					const savedPopupContent = popupRef.current
-						? popupRef.current.getElement()
-						: null;
-
-					// Hapus sumber layer jika sudah ada sebelumnya
-					if (mapRef.current.getSource("polygons")) {
-						mapRef.current.removeLayer("polygons");
-						mapRef.current.removeSource("polygons");
-					}
-
-					// Tambahkan sumber dan layer baru
-					mapRef.current.addSource("polygons", {
-						type: "geojson",
-						data: {
-							type: "FeatureCollection",
-							features: data.map((item: any) => ({
-								type: "Feature",
-								geometry: {
-									type: "MultiPolygon",
-									coordinates: item.koordinat_geom.coordinates,
-								},
-								properties: {
-									title: item.nama_kec,
-									description: item.provinsi,
-									total_sekolah: item.jumlah_sekolah,
-									zona_pertama: item.zona_pertama,
-									color: newColorMap[item.nama_kec],
-								},
-							})),
-						},
-					});
-
-					mapRef.current.addLayer({
-						id: "polygons",
-						type: "fill",
-						source: "polygons",
-						paint: {
-							"fill-color": ["get", "color"],
-							"fill-opacity": 1,
-						},
-					});
-
-					// Pulihkan popup jika sebelumnya ada
-					if (savedPopup && savedPopupContent) {
-						const container = document.createElement("div");
-						container.appendChild(savedPopupContent);
-						popupRef.current = new mapboxgl.Popup({
-							closeButton: false,
-							closeOnClick: false,
-							className: "popup",
-							offset: 25,
-						})
-							.setLngLat(savedPopup)
-							.setDOMContent(container)
-							.addTo(mapRef.current!);
-					}
-				}
+				setPolygonData(data);
 			} catch (error: any) {
-				if (error.name !== "AbortError") {
+				if (error.name !== "AbortError")
 					console.error("Error fetching data:", error);
-				}
 			}
-
-			return () => {
-				controller.abort();
-			};
+			return () => controller.abort();
 		};
 
 		fetchData();
@@ -221,49 +133,40 @@ const MapZonasi = () => {
 
 		mapRef.current.on("style.load", handleStyleLoad);
 
-		// Cleanup event listeners dan popup ketika komponen di-unmount
 		return () => {
-			if (mapRef.current) {
-				mapRef.current.off("style.load", handleStyleLoad);
-			}
-
-			if (popupRef.current) {
-				popupRef.current.remove();
-				popupRef.current = null;
-			}
-
-			if (markerRef.current) {
-				markerRef.current.remove();
-				markerRef.current = null;
-			}
+			if (mapRef.current) mapRef.current.off("style.load", handleStyleLoad);
 		};
 	}, [lng, lat, zoom, showPolygons]);
 
-	// Geolocate user
 	useEffect(() => {
 		if (!mapRef.current || !userLocation) return;
 
 		const userPoint = turf.point([userLocation.lng, userLocation.lat]);
 
 		let containsKec = null;
-		let schoolArray: any = { SMP: [], SMA: [] };
+		const schoolArray: any = {
+			zona_pertama: { SMP: [], SMA: [] },
+			zona_kedua: { SMP: [], SMA: [] },
+		};
 
-		// Cek apakah pengguna berada di dalam polygon
 		polygonData.forEach((item: any) => {
 			const polygon = turf.multiPolygon(item.koordinat_geom.coordinates);
 			if (turf.booleanPointInPolygon(userPoint, polygon)) {
 				containsKec = item.nama_kec;
 
-				if (Array.isArray(item.zona_pertama)) {
-					item.zona_pertama.forEach((zona: any) => {
-						if (zona.SMP) {
-							schoolArray.SMP = zona.SMP;
-						}
-						if (zona.SMA) {
-							schoolArray.SMA = zona.SMA;
-						}
-					});
-				}
+				["zona_pertama", "zona_kedua"].forEach((zonaKey) => {
+					if (Array.isArray(item[zonaKey])) {
+						item[zonaKey].forEach((zona: any) => {
+							if (zona.SMP) {
+								schoolArray[zonaKey].SMP.push(...zona.SMP);
+							}
+							if (zona.SMA) {
+								schoolArray[zonaKey].SMA.push(...zona.SMA);
+							}
+						});
+					}
+				});
+
 				setSchoolList(schoolArray);
 				setKecName(containsKec);
 			}
@@ -271,7 +174,10 @@ const MapZonasi = () => {
 
 		if (
 			containsKec &&
-			(schoolArray.SMP.length > 0 || schoolArray.SMA.length > 0)
+			(schoolArray.zona_pertama.SMP.length > 0 ||
+				schoolArray.zona_pertama.SMA.length > 0 ||
+				schoolArray.zona_kedua.SMP.length > 0 ||
+				schoolArray.zona_kedua.SMA.length > 0)
 		) {
 			openModal();
 		} else {
@@ -359,45 +265,66 @@ const MapZonasi = () => {
 		};
 	}, [polygonData, userLocation]);
 
-	// Mengaktifkan dan Menonaktifkan Layer
 	useEffect(() => {
-		if (mapRef.current) {
-			const visibleFeatures = polygonData
-				? polygonData.filter((item: any) => visibilityMap[item.nama_kec])
-				: [];
+		if (mapRef.current && polygonData) {
+			// Definisikan dan filter visibleFeatures berdasarkan visibilityMap
+			const visibleFeatures = polygonData.filter(
+				(item: any) => visibilityMap[item.nama_kec]
+			);
 
-			if (mapRef.current.getSource("polygons")) {
-				(
-					mapRef.current.getSource("polygons") as mapboxgl.GeoJSONSource
-				).setData({
-					type: "FeatureCollection",
-					features: visibleFeatures.map((item: any) => ({
-						type: "Feature",
-						geometry: item.koordinat_geom,
-						properties: {
-							title: item.nama_kec,
-							description: item.provinsi,
-							total_sekolah: item.jumlah_sekolah,
-							color: colorMap[item.nama_kec],
-						},
-					})),
+			// Tambahkan sumber data GeoJSON ke peta jika belum ada
+			if (!mapRef.current.getSource("polygons")) {
+				mapRef.current.addSource("polygons", {
+					type: "geojson",
+					data: {
+						type: "FeatureCollection",
+						features: [], // Inisialisasi dengan array kosong
+					},
 				});
 			}
+
+			// Set data baru ke sumber GeoJSON
+			(mapRef.current.getSource("polygons") as mapboxgl.GeoJSONSource).setData({
+				type: "FeatureCollection",
+				features: visibleFeatures.map((item: any) => ({
+					type: "Feature",
+					geometry: item.koordinat_geom, // Pastikan ini mengikuti format GeoJSON
+					properties: {
+						title: item.nama_kec,
+						description: item.provinsi,
+						total_sekolah: item.jumlah_sekolah,
+						color: colorMap[item.nama_kec], // Ambil warna dari colorMap
+					},
+				})),
+			});
+
+			// Jika layer belum ada, tambahkan layer untuk menampilkan poligon
+			if (!mapRef.current.getLayer("polygons")) {
+				mapRef.current.addLayer({
+					id: "polygons",
+					type: "fill",
+					source: "polygons", // Sumber yang baru saja kita tambahkan
+					paint: {
+						"fill-color": ["get", "color"], // Warna diambil dari properti 'color'
+						"fill-opacity": 0.6, // Set opacity agar semi transparan
+					},
+				});
+			} else {
+				// Jika layer sudah ada, pastikan layer terlihat
+				mapRef.current.setLayoutProperty("polygons", "visibility", "visible");
+			}
 		}
-	}, [visibilityMap, polygonData, colorMap]);
+	}, [polygonData, colorMap, visibilityMap]);
 
 	const handleCheckboxChange = (namaKota: string) => {
-		setVisibilityMap((prev) => ({
-			...prev,
-			[namaKota]: !prev[namaKota],
-		}));
+		setVisibilityMap((prev) => ({ ...prev, [namaKota]: !prev[namaKota] }));
 	};
 
 	const filteredData = Array.isArray(polygonData)
 		? polygonData.filter((item) =>
 				item.nama_kec.toLowerCase().includes(searchTerm.toLowerCase())
 		  )
-		: []; // Jika polygonData bukan array, set filteredData ke array kosong
+		: [];
 
 	return (
 		<div className="relative pl-2 md:pl-0 w-full h-full">
@@ -419,24 +346,19 @@ const MapZonasi = () => {
 			)}
 			{legendVisible && (
 				<div className="absolute top-20 left-6 md:left-4 bg-white p-4 rounded shadow-md z-10">
-					{/* Bagian ini tidak akan ikut di-scroll */}
 					<h1 className="text-2xl mb-3 font-semibold text-center">Legenda</h1>
 					{polygonData && (
 						<div className="w-full">
 							<div className="flex justify-between items-center">
 								<h2 className="text-lg font-semibold">Kecamatan</h2>
-
-								{/* Input search */}
 								<input
 									type="text"
 									placeholder="Cari Kecamatan..."
 									value={searchTerm}
-									onChange={(e) => setSearchTerm(e.target.value)} // Update state pencarian
+									onChange={(e) => setSearchTerm(e.target.value)}
 									className="w-1/2 h-5 p-4 border border-gray-600 rounded"
 								/>
 							</div>
-
-							{/* Bagian scrollable dimulai dari sini */}
 							<div className="max-h-80 overflow-y-auto mt-2">
 								<div className="grid grid-cols-2 gap-4">
 									{filteredData.map((item: any, index: number) => (
@@ -462,12 +384,11 @@ const MapZonasi = () => {
 					)}
 				</div>
 			)}
-
 			<InformationSchool
 				isOpen={isModalOpen}
 				onClose={closeModal}
 				title={`Daftar Sekolah di daerah anda`}
-				daftarSekolah={schoolList} // Pastikan array valid dikirim
+				daftarSekolah={schoolList}
 			/>
 		</div>
 	);

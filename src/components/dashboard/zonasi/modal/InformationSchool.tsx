@@ -12,6 +12,7 @@ const InformationSchool = ({ isOpen, onClose, title, daftarSekolah }: any) => {
 	useEffect(() => {
 		if (isOpen && daftarSekolah) {
 			// Memastikan data diterima dan valid sebelum diproses
+			console.log("Data Sekolah Diterima:", daftarSekolah);
 			setSchools(daftarSekolah);
 		} else {
 			setSchools({});
@@ -38,6 +39,8 @@ const InformationSchool = ({ isOpen, onClose, title, daftarSekolah }: any) => {
 
 	// Fungsi untuk menampilkan daftar sekolah dari JSON berdasarkan filter
 	const renderSchoolList = (zonaData: any) => {
+		if (!zonaData) return <p>Data sekolah tidak tersedia</p>;
+
 		return (
 			<div className="p-4 max-h-3/4">
 				<div className="flex gap-2 items-center pb-2 w-full">
@@ -89,14 +92,18 @@ const InformationSchool = ({ isOpen, onClose, title, daftarSekolah }: any) => {
 	const downloadExcel = () => {
 		const data = [];
 		const maxLength = Math.max(
-			schools.SMP ? schools.SMP.length : 0,
-			schools.SMA ? schools.SMA.length : 0
+			schools.zona_pertama?.SMP?.length || 0,
+			schools.zona_pertama?.SMA?.length || 0,
+			schools.zona_kedua?.SMP?.length || 0,
+			schools.zona_kedua?.SMA?.length || 0
 		);
 
 		for (let i = 0; i < maxLength; i++) {
 			data.push({
-				SMP: schools.SMP && schools.SMP[i] ? schools.SMP[i] : "",
-				SMA: schools.SMA && schools.SMA[i] ? schools.SMA[i] : "",
+				SMP_zona_pertama: schools.zona_pertama?.SMP?.[i] || "",
+				SMA_zona_pertama: schools.zona_pertama?.SMA?.[i] || "",
+				SMP_zona_kedua: schools.zona_kedua?.SMP?.[i] || "",
+				SMA_zona_kedua: schools.zona_kedua?.SMA?.[i] || "",
 			});
 		}
 
@@ -188,7 +195,9 @@ const InformationSchool = ({ isOpen, onClose, title, daftarSekolah }: any) => {
 					</button>
 				</div>
 				{/* Menampilkan daftar sekolah berdasarkan zona */}
-				{activeDiv === 1 && renderSchoolList(schools)}
+				{activeDiv === 1 && renderSchoolList(schools.zona_pertama)}
+				{/* zona_pertama*/}
+				{activeDiv === 2 && renderSchoolList(schools.zona_kedua)}
 				{/* Tombol untuk menutup modal */}
 				<button
 					onClick={onClose}
